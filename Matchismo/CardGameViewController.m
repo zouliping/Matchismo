@@ -16,6 +16,7 @@
 @property (strong,nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
+@property (weak, nonatomic) IBOutlet UILabel *modeLabel;
 
 @end
 
@@ -70,6 +71,21 @@
     }
 }
 
+- (IBAction)resetGame:(UIButton *)sender {
+    self.scoreLabel.text = @"Socre: 0";
+    [self.game shuffleCards:[self.cardButtons count] usingDeck:self.deck];
+    
+    for (UIButton *cardButton in self.cardButtons) {
+        int cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
+        Card *card = [self.game cardAtIndex:cardButtonIndex];
+        card.chosen = false;
+        [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
+        [cardButton setBackgroundImage:[self backgroundForCard:card] forState:UIControlStateNormal];
+        cardButton.enabled = true;
+    }
+
+}
+
 - (NSString *)titleForCard:(Card *)card{
     return card.isChosen ? card.content : @"";
 }
@@ -78,16 +94,12 @@
     return [UIImage imageNamed:card.isChosen ? @"cardfront" : @"cardback"];
 }
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (IBAction)modeSwitch:(UISwitch *)sender   {
+    if ([sender isOn]) {
+        self.modeLabel.text = @"2-card-match mode";
+    }else{
+        self.modeLabel.text = @"3-card-match mode";
+    }
 }
 
 @end

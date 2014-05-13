@@ -77,4 +77,14 @@ static const int COST_TO_CHOOSE = 1;
     }
 }
 
+- (void) shuffleCards:(NSUInteger)count usingDeck:(Deck *)deck{
+    self.score = 0;
+    for (int i = 0; i < count; i++) {
+        Card *card = [deck drawRandomCard];
+        if (card) {
+            [self.cards setObject:card atIndexedSubscript:i];
+        }
+    }
+}
+
 @end
